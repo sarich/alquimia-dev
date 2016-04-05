@@ -190,7 +190,15 @@ if (ALQUIMIA_NEED_PETSC)
     message(FATAL_ERROR "PETSC_ARCH must be set for the requested engines to be enabled.")
   endif()
   set(PETSC_DIR $ENV{PETSC_DIR})
-  set(PETSC_ARCH $ENV{PETSC_ARCH})
+  set(PETSC_ARCH $ENV{PETSC_ARCH}
+
+  # Tell PETSc not to try to run executables, as this doesn't work on 
+  # certain supercomputers with login/compute nodes having different 
+  # architectures.
+  set(PETSC_EXECUTABLE_RUNS TRUE)
+  set(MULTIPASS_TEST_3_petsc_works_alllibraries_EXITCODE 0)
+  set(MULTIPASS_TEST_3_petsc_works_all_EXITCODE 0))
+
   find_package(PETSc)
   if (NOT PETSC_FOUND)
     message(FATAL_ERROR "PETSc was not found.")
